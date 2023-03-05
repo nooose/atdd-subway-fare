@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -75,6 +76,13 @@ public class Sections {
         }
 
         return result;
+    }
+
+    public List<Line> allLines() {
+        return sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
     }
 
     private void checkDuplicateSection(Section section) {
@@ -147,7 +155,7 @@ public class Sections {
                 .findFirst();
     }
 
-    public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
+    public int sumByCondition(ToIntFunction<Section> condition) {
+        return sections.stream().mapToInt(condition).sum();
     }
 }
